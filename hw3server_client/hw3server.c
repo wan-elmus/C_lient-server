@@ -116,7 +116,7 @@ int main()
     int sockfd, newsockfd, portno;
     socklen_t clilen;
     struct sockaddr_in serv_addr, cli_addr;
-    int n;
+    // int n;
     pthread_t threads[MAX_CLIENTS];
     int num_clients = 0;
 
@@ -165,7 +165,8 @@ int main()
         // Check if maximum number of clients have already connected
         if (num_clients == MAX_CLIENTS)
         {
-            char msg [] =("Maximum number of clients reached. Connection refused.\n");
+            // char msg [] =("Maximum number of clients reached. Connection refused.\n");
+            printf("Maximum number of clients reached. Connection refused.\n");
             close(newsockfd);
         }
         else
