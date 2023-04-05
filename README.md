@@ -18,9 +18,13 @@ pthread.h
 
 ## Usage
 
+The working server and client code are in the chat_server directory.
+
 To compile the code, navigate to the directory containing the hw3server.c file and run the following command:
 
-*gcc hw3server.c -lpthread -o server*
+*gcc sever.c -lpthread -o server*
+
+Or simply use the Makefile by typing *make* in the terminal, in the chat_server directory.
 
 **To start the server:**
 
