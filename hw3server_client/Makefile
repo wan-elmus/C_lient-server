@@ -1,17 +1,21 @@
 
 CC = gcc
-CFLAGS = -Wall -Wextra -pthread
-SRCS = hw3server.c
-OBJS = $(SRCS:.c=.o)
-TARGET = server
+CFLAGS = -Wall -Werror
+LDFLAGS = -lpthread
+SERVER_SOURCES = hw3server.c
+CLIENT_SOURCES = client.c
+SERVER_EXECUTABLE = server
+CLIENT_EXECUTABLE = client
 
-all: $(TARGET)
+all: $(SERVER_EXECUTABLE) $(CLIENT_EXECUTABLE)
 
-$(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS)
+$(SERVER_EXECUTABLE): $(SERVER_SOURCES)
+	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
-.c.o:
-	$(CC) $(CFLAGS) -c $< -o $@
+$(CLIENT_EXECUTABLE): $(CLIENT_SOURCES)
+	$(CC) $(CFLAGS) $^ -o $@
 
+.PHONY: clean
 clean:
-	rm -f $(OBJS) $(TARGET)
+	rm -f $(SERVER_EXECUTABLE) $(CLIENT_EXECUTABLE)
+
