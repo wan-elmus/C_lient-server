@@ -39,17 +39,41 @@ void *client_handler(void *arg)
         error("ERROR invalid welcome message from client");
     }
     // Send "prompt" message on a separate line
-    if (write(sockfd, "root@client:~#\n", 6) < 0)
+    // if (write(sockfd, "root@client:~#\n", 6) < 0)
+    if (write(sockfd, "root@client:~#\n", 15) < 0)
     {
         error("ERROR writing to socket");
     }
 
     while (true)
+{
+    n = read(sockfd, buffer, MAX_MESSAGE_LEN);
+    if (n <= 0)
     {
-        n = read(sockfd, buffer, MAX_MESSAGE_LEN);
-        if (n <= 0)
+        // Client closed connection
+        close(sockfd);
+        printf("Client disconnected\n");
+
+        // Notify other clients that this client has disconnected
+        for (int j = 0; j < MAX_CLIENTS; j++)
         {
-            // Client closed connection
+            if (client_sockets[j] != -1 && client_sockets[j] != sockfd)
+            {
+                if (write(client_sockets[j], "Client disconnected\n", 21) < 0)
+                {
+                    error("ERROR writing to socket");
+                }
+            }
+        }
+
+        pthread_exit(NULL);
+    }
+    else
+    {
+        // Check if received message is the disconnect message
+        if (strncmp(buffer, "\rSTOP\n", 6) == 0)
+        {
+            // Close socket and exit thread
             close(sockfd);
             printf("Client disconnected\n");
 
@@ -84,6 +108,8 @@ void *client_handler(void *arg)
             }
         }
     }
+}
+
 }
 
 int main()
