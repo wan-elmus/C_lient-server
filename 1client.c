@@ -51,7 +51,7 @@ int main() {
     // Send and receive messages until disconnect
     while (1) {
         // Send message to server
-        printf("You: ");
+        printf("root@client:~#\n");
         fgets(message, MAX_MESSAGE_LEN, stdin);
         if (send(sockfd, message, strlen(message), 0) < 0) {
             error("Error sending message");

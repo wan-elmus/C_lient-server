@@ -1,4 +1,6 @@
 
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -27,16 +29,22 @@ void *client_handler(void *arg)
     int n;
 
     // Send welcome message to client
-    if (write(sockfd, "START\n", 5) < 0)
+    if (write(sockfd, "START\n", 6) < 0)
     {
         error("ERROR writing to socket");
     }
 
     // Receive welcome message from client
     n = read(sockfd, buffer, MAX_MESSAGE_LEN);
-    if (n <= 0 || strncmp(buffer, "\rHI\n", 5) != 0)
+    if (n <= 0 || strncmp(buffer, "\rHI\n", 6) != 0)
     {
         error("ERROR invalid welcome message from client");
+    }
+    // Send "You" message on a separate line
+    // if (write(sockfd, "You\n", 4) < 0)
+    if (write(sockfd, "root@client:~#\n", 4) < 0)
+    {
+        error("ERROR writing to socket");
     }
 
     while (true)
@@ -46,37 +54,21 @@ void *client_handler(void *arg)
         {
             // Client closed connection
             close(sockfd);
-            // printf("Client disconnected\n");
-            char msg [] = ("Client disconnected\n");
+            printf("Client disconnected\n");
 
-            // // Notify other clients that this client has disconnected
-            // for (int j = 0; j < MAX_CLIENTS; j++)
-            // {
-            //     if (client_sockets[j] != -1 && client_sockets[j] != sockfd)
-            //     {
-            //         if (write(client_sockets[j], buffer, n) < 0)
-            //         {
-            //             error("ERROR writing to socket");
-            //         }
-            //     }
-            // }
-
-            // pthread_exit(NULL);
             // Notify other clients that this client has disconnected
-            char msg[] = "Client disconnected\n";
-                for (int j = 0; j < MAX_CLIENTS; j++)
+            for (int j = 0; j < MAX_CLIENTS; j++)
+            {
+                if (client_sockets[j] != -1 && client_sockets[j] != sockfd)
                 {
-                    if (client_sockets[j] != -1 && client_sockets[j] != sockfd)
+                    if (write(client_sockets[j], "Client disconnected\n", 21) < 0)
                     {
-                        if (write(client_sockets[j], msg, sizeof(msg)) < 0)
-                        {
-                            error("ERROR writing to socket");
-                        }           
+                        error("ERROR writing to socket");
                     }
                 }
+            }
 
-                pthread_exit(NULL);
-
+            pthread_exit(NULL);
         }
         else
         {

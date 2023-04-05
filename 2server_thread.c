@@ -39,6 +39,12 @@ void *client_handler(void *arg)
     {
         error("ERROR invalid welcome message from client");
     }
+    // Send "You" message on a separate line
+    // if (write(sockfd, "You\n", 4) < 0)
+    if (write(sockfd, "root@client:~#\n", 4) < 0)
+    {
+        error("ERROR writing to socket");
+    }
 
     while (true)
     {
