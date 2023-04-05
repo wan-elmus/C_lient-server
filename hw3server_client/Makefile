@@ -1,7 +1,7 @@
 
 CC = gcc
 CFLAGS = -Wall -Wextra -pthread
-SRCS = server.c
+SRCS = hw3server.c
 OBJS = $(SRCS:.c=.o)
 TARGET = server
 
