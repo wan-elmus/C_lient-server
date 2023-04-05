@@ -42,36 +42,50 @@ int main() {
     }
     printf("Server: %s", message);
 
-    // Send welcome message back to server
-    strcpy(message, "\rHI\n");
+    // Send greeting message to server
+    strcpy(message, "Hi, how are you doing?\n");
     if (send(sockfd, message, strlen(message), 0) < 0) {
-        error("Error sending welcome message");
+        error("Error sending message");
     }
 
-    // Send and receive messages until disconnect
-    while (1) {
-        // Send message to server
-        printf("root@client:~#\n");
-        fgets(message, MAX_MESSAGE_LEN, stdin);
-        if (send(sockfd, message, strlen(message), 0) < 0) {
-            error("Error sending message");
-        }
+    // Receive response from server
+    memset(message, 0, MAX_MESSAGE_LEN);
+    if (recv(sockfd, message, MAX_MESSAGE_LEN, 0) < 0) {
+        error("Error receiving message");
+    }
+    printf("Server: %s", message);
 
-        // Receive message from server
-        memset(message, 0, MAX_MESSAGE_LEN);
-        if (recv(sockfd, message, MAX_MESSAGE_LEN, 0) < 0) {
-            error("Error receiving message");
-        }
-        printf("Server: %s", message);
-
-        // Check for disconnect message
-        if (strcmp(message, "\rSTOP\n") == 0) {
-            printf("Disconnecting...\n");
-            break;
-        }
+    // Send another message to server
+    strcpy(message, "I'm good too, thanks. What are you up to?\n");
+    if (send(sockfd, message, strlen(message), 0) < 0) {
+        error("Error sending message");
     }
 
-    // Close socket
+    // Receive response from server
+    memset(message, 0, MAX_MESSAGE_LEN);
+    if (recv(sockfd, message, MAX_MESSAGE_LEN, 0) < 0) {
+        error("Error receiving message");
+    }
+    printf("Server: %s", message);
+
+    // Send another message to server
+    strcpy(message, "I'm just testing this chat application. It seems to work well.\n");
+    if (send(sockfd, message, strlen(message), 0) < 0) {
+        error("Error sending message");
+    }
+
+    // Receive response from server
+    memset(message, 0, MAX_MESSAGE_LEN);
+    if (recv(sockfd, message, MAX_MESSAGE_LEN, 0) < 0) {
+        error("Error receiving message");
+    }
+    printf("Server: %s", message);
+
+    // Send a farewell message to server
+    strcpy(message, "Sure, will do. Bye!\n");
+    if (send(sockfd, message, strlen(message), 0) < 0) {
+        error("Error sending message");
+// Close socket
     close(sockfd);
 
     return 0;
