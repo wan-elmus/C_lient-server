@@ -57,19 +57,13 @@ int main() {
             error("Error sending message");
         }
 
-        // Receive message from server
-        memset(message, 0, MAX_MESSAGE_LEN);
-        if (recv(sockfd, message, MAX_MESSAGE_LEN, 0) < 0) {
-            error("Error receiving message");
-        }
-        printf("Server: %s", message);
-
         // Check for disconnect message
         if (strcmp(message, "\rSTOP\n") == 0) {
             printf("Disconnecting...\n");
             break;
         }
     }
+
     // Close socket
     close(sockfd);
 

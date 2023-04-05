@@ -1,6 +1,4 @@
 
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -14,7 +12,7 @@
 #define MAX_MESSAGE_LEN 250
 #define SERVER_PORT 45000
 
-int client_sockets[MAX_CLIENTS]; // Move client_sockets array to global scope
+int client_sockets[MAX_CLIENTS]; 
 
 void error(const char *msg)
 {
@@ -40,9 +38,8 @@ void *client_handler(void *arg)
     {
         error("ERROR invalid welcome message from client");
     }
-    // Send "You" message on a separate line
-    // if (write(sockfd, "You\n", 4) < 0)
-    if (write(sockfd, "root@client:~#\n", 4) < 0)
+    // Send "prompt" message on a separate line
+    if (write(sockfd, "root@client:~#\n", 6) < 0)
     {
         error("ERROR writing to socket");
     }
@@ -143,7 +140,6 @@ int main()
         // Check if maximum number of clients have already connected
         if (num_clients == MAX_CLIENTS)
         {
-            // printf("Maximum number of clients reached. Connection refused.\n");
             char msg [] =("Maximum number of clients reached. Connection refused.\n");
             close(newsockfd);
         }
