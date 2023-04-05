@@ -39,7 +39,6 @@ void *client_handler(void *arg)
         error("ERROR invalid welcome message from client");
     }
     // Send "prompt" message on a separate line
-    // if (write(sockfd, "root@client:~#\n", 6) < 0)
     if (write(sockfd, "root@client:~#\n", 15) < 0)
     {
         error("ERROR writing to socket");
